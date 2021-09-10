@@ -39,3 +39,20 @@ export const loginWithGoogle = () => {
     const db = firebase.firestore();
    return db.collection("postagens").add(postagem);
   };
+
+  // Usuário
+
+export const usuarioData = () => {
+  const uid = localStorage.getItem('uid');
+  const displayName = localStorage.getItem('displayName');
+  const email = localStorage.getItem('email');
+  if (!uid && !displayName && !email) {
+    return null; 
+  }
+  const user = {
+    uid,
+    displayName,
+    email,
+  };
+  return user;
+};
