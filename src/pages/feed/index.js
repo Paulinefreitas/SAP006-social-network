@@ -1,7 +1,10 @@
-import { postarMensagem } from "../../services/index.js";
-// import { } from 'firebase/firestore';
+import { postarMensagem, currentUser } from "../../services/index.js";
+import { postTemplate } from "../../componentes/index.js";
 export default () => {
   const container = document.createElement("div");
+
+  const usuario = currentUser
+  const nomeUsuario = usuario.displayName
 
   const template = `
     <header>
@@ -40,12 +43,15 @@ export default () => {
         <a href="">Feed</a>
         <a href="">Adicionar</a>
         <a href="">Pesquisar</a>
-        <a href="">Perfil</a>
+        <a href="">Logout</a>
       </nav>
     </footer>
     
     `;
   container.innerHTML = template;
+
+  loadPosts();
+
   //CRIAR POST
   const btn = container.querySelector("#button-publicar");
   btn.addEventListener("click", () => {
@@ -55,9 +61,9 @@ export default () => {
     const filmImage = container.querySelector("#input-img-film").value;
     const postagem = {
       text: text,
-      img_film: filmImage,
-      name_film: filmName,
-      user_id: "Julio",
+      film_name: filmName,
+      film_img: filmImage,
+      user_id: "teste",
       likes: 0,
       comments: [],
     };
@@ -65,6 +71,7 @@ export default () => {
     postarMensagem(postagem)
       .then(() => {
         console.log("Document successfully written!");
+        loadPosts();
       })
       .catch((error) => {
         console.error("Error writing document: ", error);
@@ -72,51 +79,35 @@ export default () => {
   });
 
   return container;
+
+  // MOSTRAR POST NA TELA
+ 
+  function loadPosts() {
+    const postsCollection = firebase.firestore().collection("postagens");
+    container.querySelector("#lista-feed").innerHTML = "Carregando...";
+    postsCollection.get().then((querySnapshot) => {
+      container.querySelector("#lista-feed").innerHTML = "";
+      querySnapshot.forEach((doc) => {
+        const post = { id: doc.id, data: doc.data() };
+                const componente = postTemplate(post);
+        container.querySelector("#lista-feed").appendChild(componente);
+      });
+    });
+  }
+
+  //DELETAR POST
+  function deletePost(postagem) {
+    const postsCollection = firebase.firestore().collection("postagens");
+    postsCollection
+      .doc(postagem)
+      .delete()
+      .then((doc) => {
+        loadPosts();
+      });
+  }
 };
 
-// MOSTRAR POST NA TELA
-function addPost(postagem) {
-  const postTemplate = `
-<div id="card-post">
-  <div class="usuario-card">
-    <h3>${postagem.data().user_id}</h3>
-  </div>
-  <div class="id-filme-card">
-    <h2>${postagem.data().filmName}</h2>
-    <section>${postagem.data().filmImage}</section>
-  </div>
-  <div class="texto-card">
-  <p>${postagem.data().text}</p>
-  </div>
-  <div class="interacao-card">
-    <button id="like"><span class="iconify" data-icon="mdi-light:heart" style="color: #111;" data-height="20"></span>${
-      postagem.data().likes
-    }</button>
-    <button id="comentar"><span class="iconify" data-icon="mdi-light:comment" style="color: #111;" data-height="20"></span>${
-      postagem.data().comments
-    }</button>
-    <button id="deletar"><span class="iconify" data-icon="mdi-light:delete" style="color: #111;" data-height="20"></span>Deletar</button>
-  </div>
-  
-</div>
-`;
-  container.querySelector("#lista-feed").innerHTML += postTemplate;
-}
 
-// function loadPosts() {
-//   const postCollection = firebase.firestore().collection("postagem");
-//   document.getElementById("postagem").innerHTML = "Carregando...";
-//   postsCollection.get().then((snap) => {
-//     document.getElementById("postagem").innerHTML = "";
-//     snap.forEach((postagem) => {
-//       addPost(postagem);
-//     });
-//   });
-// }
+// CURTIR POST
 
-// //DELETAR POST
-// function deletePost(postId){
-//   postsCollection.doc(postId).delete().then(doc => {
-//     loadPosts()
-//   });
-// }
+// EDITAR POST
