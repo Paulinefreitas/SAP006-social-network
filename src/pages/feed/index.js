@@ -1,16 +1,20 @@
-import { postarMensagem, currentUser } from "../../services/index.js";
+import {
+  postarMensagem,
+  receberUsuario,
+  logOut,
+} from "../../services/index.js";
 import { postTemplate } from "../../componentes/index.js";
 export default () => {
   const container = document.createElement("div");
 
-  const usuario = currentUser
-  const nomeUsuario = usuario.displayName
-
   const template = `
-    <header>
-      <h1>Ellas</h1>
-    </header>
-    <form action="" id="post-form" class="form">
+  <div class="feed">
+  <header>
+  <h1 class="home-header">Ellas</h1>
+  <button id="logout-perfil" class="logout-header">Logout</button>
+  </header>
+  <section id="conteudo-central">
+  <form action="" id="post-form" class="form">
       <label for="name-film">Filme</label>
       <input type="text" id="name-film" />
       <label for="img-film">Anexe uma imagem do filme</label>
@@ -35,22 +39,31 @@ export default () => {
         <button class="button-post" type="button" id="button-descartar">Descartar</button>
       </div>
 </form>
-<section id="feed">
+<div id="feed">
   <div id="lista-feed" class="lista-feed"></div>
+</div>
 </section>
+<aside id="conteudo-lateral">
+<div id="card-perfil">
+  <img src="" alt=""/>
+  <input type="file" id="foto-usuario" accept="image/*"></input>
+  <div class="username"></div>
+  <button class="btn-editar-perfil">Editar</button>
+</div>
+</aside>
     <footer id="rodape">
       <nav>
         <a href="">Feed</a>
         <a href="">Adicionar</a>
         <a href="">Pesquisar</a>
-        <a href="">Logout</a>
       </nav>
-    </footer>
-    
+    </footer>  
+    </div>
     `;
   container.innerHTML = template;
 
   loadPosts();
+  const userInfo = receberUsuario();
 
   //CRIAR POST
   const btn = container.querySelector("#button-publicar");
@@ -63,9 +76,9 @@ export default () => {
       text: text,
       film_name: filmName,
       film_img: filmImage,
-      user_id: "teste",
+      user_id: userInfo.uid,
+      username: userInfo.displayName,
       likes: 0,
-      comments: [],
     };
 
     postarMensagem(postagem)
@@ -78,10 +91,15 @@ export default () => {
       });
   });
 
+  const logout = container.querySelector("#logout-perfil");
+  logout.addEventListener("click", () => {
+    logOut();
+  });
+
   return container;
 
   // MOSTRAR POST NA TELA
- 
+
   function loadPosts() {
     const postsCollection = firebase.firestore().collection("postagens");
     container.querySelector("#lista-feed").innerHTML = "Carregando...";
@@ -89,25 +107,9 @@ export default () => {
       container.querySelector("#lista-feed").innerHTML = "";
       querySnapshot.forEach((doc) => {
         const post = { id: doc.id, data: doc.data() };
-                const componente = postTemplate(post);
+        const componente = postTemplate(post);
         container.querySelector("#lista-feed").appendChild(componente);
       });
     });
   }
-
-  //DELETAR POST
-  function deletePost(postagem) {
-    const postsCollection = firebase.firestore().collection("postagens");
-    postsCollection
-      .doc(postagem)
-      .delete()
-      .then((doc) => {
-        loadPosts();
-      });
-  }
 };
-
-
-// CURTIR POST
-
-// EDITAR POST

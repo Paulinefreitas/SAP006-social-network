@@ -4,25 +4,29 @@ export default () => {
   const container = document.createElement("div");
 
   const template = `
-  <h1>Ellas</h1>
-  <p>Uma filmografia repleta de mulheres incríveis para te inspirar!</p>
-  <img class ="img-wonder" src="../imagens/wonderwhite.jpg">
-  <div class="container">
-  <div class="card">
-      <h2>Fazer login :</h2>
-      <form method='post'>
-        <input required="" autocomplete="off" type='email' placeholder='Email' id='emailArea' class='login-area'>
-        <input required="" autocomplete="off" type='password' placeholder='Senha' id='passwordArea' class='login-area'>
-      </form>
-      <button class='button-area btn signIn' id='start'>Entrar</button>
-      <p class="or-area">━━━━━━━━━ OU ━━━━━━━━━</p>
-      <button class='button-area btn btnGoogle' id='google-button'><img src='imagens/google_small_icon.png' alt='Google' class='google-icon'>Entrar com o google</button>
-      <p class='font-small'>Se não tem uma conta, <a href='/#cadastro' 
-      id='sign-up-login'>Cadastre-se.</a>
-      </p>
+  <div class="login">
+    <div class="text">
+      <h1>Ellas</h1>
+      <p>Uma filmografia repleta de mulheres incríveis para te inspirar!</p>
+      <div class = "images">
+      <img src="../imagens/wonderwoman.png"/>
+    </div>
+    <div class="container">
+      <div class="card">
+        <h2>Fazer login :</h2>
+        <form method='post'>
+          <input required="" autocomplete="off" type='email' placeholder='Email' id='emailArea' class='login-area'>
+          <input required="" autocomplete="off" type='password' placeholder='Senha' id='passwordArea' class='login-area'>
+        </form>
+        <button class='button-area btn signIn' id='start'>Entrar</button>
+        <p class="or-area">━━━━━━━━━ OU ━━━━━━━━━</p>
+        <button class='button-area btn btnGoogle' id='google-button'><img src='imagens/google_small_icon.png' alt='Google' class='google-icon'>Entrar com o google</button>
+        <p class='font-small'>Se não tem uma conta, 
+        <a href='/#cadastro' id='sign-up-login'>Cadastre-se.</a>
+        </p>
+      </div> 
     </div> 
-  </div> 
-
+  </div>
 `;
 
   container.innerHTML = template;
@@ -38,6 +42,7 @@ export default () => {
       .then((userCredential) => {
         const user = userCredential.user;
         window.location.hash = "#feed";
+        window.sessionStorage.setItem("logged", true);
         return user;
       })
 
@@ -64,6 +69,7 @@ export default () => {
     loginWithGoogle()
       .then((userCredential) => {
         const user = userCredential.user;
+        window.sessionStorage.setItem("logged", true);
         window.location.hash = "#feed";
       })
 

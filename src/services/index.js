@@ -1,3 +1,5 @@
+// Cadastro
+
 export const registerLogin = (email, password) => {
   firebase
     .auth()
@@ -16,6 +18,29 @@ export const registerLogin = (email, password) => {
     });
 };
 
+//ATUALIZAR O NOME
+export const atualizarPerfil = (displayName, photoURL) => {
+  firebase.auth().currentUser;
+
+  let userInfo = {
+    ...(displayName && { displayName }),
+    ...(photoURL && { photoURL }),
+  };
+
+  user
+    .updateProfile(userInfo)
+    .then(() => {
+      // Update successful
+      // ...
+      console.log("Perfil atualizado");
+    })
+    .catch((error) => {
+      // An error occurred
+      // ...
+      console.log(error);
+    });
+};
+
 // Login
 
 export const signIn = (email, password) =>
@@ -30,7 +55,11 @@ export const loginWithGoogle = () => {
 };
 // Logout
 
-export const logOut = () => firebase.auth().signOut();
+export const logOut = () => {
+  firebase.auth().signOut();
+  window.sessionStorage.setItem("logged", false);
+  window.location.hash = "#login";
+};
 
 const db = firebase.firestore();
 
@@ -40,26 +69,26 @@ export const postarMensagem = (postagem) => {
   return db.collection("postagens").add(postagem);
 };
 
-// Consumir DB
-
-export function pegarPosts() {
-  let data = [];
-  db.collection("postagens")
-    .get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        data.push({ data: doc.data(), id: doc.id });
-      });
-    });
-  return data;
-}
-
-//
-
 // Usuário
 
-export const currentUser = () => firebase.auth().currentUser;
+export const receberUsuario = () => {
+  const user = firebase.auth().currentUser;
+  if (user !== null) {
+    // const displayName = user.displayName;
+    // const email = user.email;
+    // const photoURL = user.photoURL;
+    // const emailVerified = user.emailVerified;
+    // const uid = user.uid;
+
+    return { displayName: user.displayName, uid: user.uid };
+  }
+};
+
+//DELETAR POST
+
+export const deletarPostagem = (postId) => {
+  return firebase.firestore().collection("postagens").doc(postId).delete();
+};
 
 // export const usuarioData = () => {
 //   const uid = localStorage.getItem("uid");
@@ -76,8 +105,29 @@ export const currentUser = () => firebase.auth().currentUser;
 //   return user;
 // };
 
-//DELETAR POST
-export function deletePost(id_postagem) {
-  const postsCollection = firebase.firestore().collection("postagens").doc(id_postagem);
-  
-}
+// EDITAR POSTAGEM
+export const editarPostagem = (text, postId) => {
+  return firebase
+    .firestore()
+    .collection("postagens")
+    .doc(postId)
+    .update({ text: text });
+};
+
+// CURTIR POSTAGEM/DESCURTIR
+
+export const curtirPostagem = (uid, postId) => {
+  return firebase
+    .firestore()
+    .collection("postagens")
+    .doc(postId)
+    .update({ like: firebase.firestore.FieldValue.arrayUnion(uid) });
+};
+
+export const descurtirPostagem = (uid, postId) => {
+  return firebase
+    .firestore()
+    .collection("postagens")
+    .doc(postId)
+    .update({ like: firebase.firestore.FieldValue.arrayRemove(uid) });
+};
