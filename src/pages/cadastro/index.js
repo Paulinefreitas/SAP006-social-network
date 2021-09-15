@@ -1,18 +1,18 @@
-import {registerLogin} from '../../services/index.js';
+import { registerLogin, atualizarPerfil } from "../../services/index.js";
 
 export default () => {
   console.log("cadastro");
   const container = document.createElement("div");
 
   const template = `
-    <h2>Ellas</h2>
+  <div class="cadastro">  
+  <h2>Ellas</h2>
     <p>Uma filmografia repleta de mulheres incríveis para te inspirar!</p>
-    <link rel="stylesheet" href="style.CSS">
     <div class="container">
       <div class="card">
         <h3>CRIAR UMA NOVA CONTA</h3>
         <form>
-          <input required="required" autocomplete="off" type="text" placeholder="Insira seu nome" id="username"
+          <input required="required" autocomplete="off" type="text" placeholder="Insira seu nome completo" id="username"
           class='login-area'>
           <input required="required" autocomplete="off" type="email" placeholder="example@example.com" id="register-email"
           class="login-area">
@@ -22,10 +22,9 @@ export default () => {
           <button class="btn button-area" id="button-register">Cadastrar</button>
         </form>
       </div>
-    </div>  
+    </div> 
+    </div> 
   `;
-
-  
 
   container.innerHTML = template;
 
@@ -36,9 +35,17 @@ export default () => {
 
   registerBtn.addEventListener("click", (event) => {
     event.preventDefault();
-    registerLogin(email.value, password.value, name.value);
-    // then(() => {
-    //   window.location.hash = '#feed';
+    registerLogin(email.value, password.value)
+      .then((user) => {
+        window.location.hash = "#feed";
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        console.log("deu ruim", errorCode, errorMessage);
+      });
+    atualizarPerfil(name.value);
   });
 
   return container;

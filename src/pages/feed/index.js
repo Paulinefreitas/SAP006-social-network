@@ -1,12 +1,20 @@
-
+import {
+  postarMensagem,
+  receberUsuario,
+  logOut,
+} from "../../services/index.js";
+import { postTemplate } from "../../componentes/index.js";
 export default () => {
   const container = document.createElement("div");
 
   const template = `
-    <header>
-      <h1>Ellas</h1>
-    </header>
-    <p><form action="" id="post-form" class="form">
+  <div class="feed">
+  <header>
+  <h1 class="home-header">Ellas</h1>
+  <button id="logout-perfil" class="logout-header">Logout</button>
+  </header>
+  <section id="conteudo-central">
+  <form action="" id="post-form" class="form">
       <label for="name-film">Filme</label>
       <input type="text" id="name-film" />
       <label for="img-film">Anexe uma imagem do filme</label>
@@ -21,80 +29,87 @@ export default () => {
       <input type="file" id="input-img-film" accept="image/*" />
       <textarea
         name="post-input"
-        id="text"
+        id="post-text"
         cols="30"
         rows="10"
         placeholder="Escreva sobre o filme..."
       ></textarea>
       <div class="buttons">
-        <button class="button-post" id="button-publicar">Publicar</button>
-        <button class="button-post" id="button-descartar">Descartar</button>
+        <button class="button-post" type="button" id="button-publicar">Publicar</button>
+        <button class="button-post" type="button" id="button-descartar">Descartar</button>
       </div>
 </form>
-  </p>
-
+<div id="feed">
+  <div id="lista-feed" class="lista-feed"></div>
+</div>
+</section>
+<aside id="conteudo-lateral">
+<div id="card-perfil">
+  <img src="" alt=""/>
+  <input type="file" id="foto-usuario" accept="image/*"></input>
+  <div class="username"></div>
+  <button class="btn-editar-perfil">Editar</button>
+</div>
+</aside>
     <footer id="rodape">
       <nav>
         <a href="">Feed</a>
         <a href="">Adicionar</a>
         <a href="">Pesquisar</a>
-        <a href="">Perfil</a>
       </nav>
-    </footer>
-    
+    </footer>  
+    </div>
     `;
   container.innerHTML = template;
-  return container;
-};
 
-//CRIAR POST
-document
-  .getElementById("post-form")
-  .addEventListener("submit", function (event) {
-    event.preventDefault();
-    const text = document.getElementById("post-text").value;
-    const filmName = document.getElementById("name-film").value;
-    const filmImage = document.getElementById("input-img-film").value;
-    const post = {
+  loadPosts();
+  const userInfo = receberUsuario();
+
+  //CRIAR POST
+  const btn = container.querySelector("#button-publicar");
+  btn.addEventListener("click", () => {
+    console.log("clicou aqui!");
+    const text = container.querySelector("#post-text").value;
+    const filmName = container.querySelector("#name-film").value;
+    const filmImage = container.querySelector("#input-img-film").value;
+    const postagem = {
       text: text,
-      img_film: filmImage,
-      name_film: filmName,
-      user_id: "Julio",
+      film_name: filmName,
+      film_img: filmImage,
+      user_id: userInfo.uid,
+      username: userInfo.displayName,
       likes: 0,
-      comments: [],
     };
-    const postCollection = firebase.firestore().collection("post");
 
-    postsCollection.add(post).then(res => {
-      document.getElementById("post-text").value = ""
-      loadPosts()
+    postarMensagem(postagem)
+      .then(() => {
+        console.log("Document successfully written!");
+        loadPosts();
+      })
+      .catch((error) => {
+        console.error("Error writing document: ", error);
+      });
+  });
+
+  const logout = container.querySelector("#logout-perfil");
+  logout.addEventListener("click", () => {
+    logOut();
+  });
+
+  return container;
+
+  // MOSTRAR POST NA TELA
+
+  function loadPosts() {
+    const postsCollection = firebase.firestore().collection("postagens");
+    container.querySelector("#lista-feed").innerHTML = "Carregando...";
+    postsCollection.get().then((querySnapshot) => {
+      container.querySelector("#lista-feed").innerHTML = "";
+      querySnapshot.forEach((doc) => {
+        const post = { id: doc.id, data: doc.data() };
+        const componente = postTemplate(post);
+        container.querySelector("#lista-feed").appendChild(componente);
+      });
     });
-  });
-
-//MOSTRAR POST NA TELA
-function addPost(post) {
-  const postTemplate = `
-  <li id="${post.id}">
-  ${post.data().text} 🤍${post.data().likes}
-  </li>
-  `;
-  document.getElementById("posts").innerHTML += postTemplate;
-}
-
-function loadPosts() {
-  const postCollection = firebase.firestore().collection("post");
-  document.getElementById("posts").innerHTML = "Carregando...";
-  postsCollection.get().then((snap) => {
-    document.getElementById("posts").innerHTML = "";
-    snap.forEach((post) => {
-      addPost(post);
-    });
-  });
-}
-
-//DELETAR POST
-function deletePost(postId){
-  postsCollection.doc(postId).delete().then(doc => { 
-    loadPosts()
-  });
-}
+  }
+};
