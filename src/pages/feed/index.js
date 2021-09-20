@@ -9,62 +9,61 @@ export default () => {
 
   const template = `
   <div class="feed">
-  <header>
-  <h1 class="home-header">Ellas</h1>
-  <button id="logout-perfil" class="logout-header">Logout</button>
-  </header>
-  <section id="conteudo-central">
-  <form action="" id="post-form" class="form">
-      <label for="name-film">Filme</label>
-      <input type="text" id="name-film" />
-      <label for="img-film">Anexe uma imagem do filme</label>
-      <span
-        class="iconify"
-        data-icon="vaadin:file-picture"
-        style="color: #bd4b4b"
-        data-height="70"
-      ></span>
-      <script src="https://code.iconify.design/2/2.0.3/iconify.min.js"></script>
-      <img src="" alt="" />
-      <input type="file" id="input-img-film" accept="image/*" />
-      <textarea
-        name="post-input"
-        id="post-text"
-        cols="30"
-        rows="10"
-        placeholder="Escreva sobre o filme..."
-      ></textarea>
-      <div class="buttons">
-        <button class="button-post" type="button" id="button-publicar">Publicar</button>
-        <button class="button-post" type="button" id="button-descartar">Descartar</button>
-      </div>
-</form>
-<div id="feed">
-  <div id="lista-feed" class="lista-feed"></div>
-</div>
-</section>
-<aside id="conteudo-lateral">
-<div id="card-perfil">
-  <img src="" alt=""/>
-  <input type="file" id="foto-usuario" accept="image/*"></input>
-  <div class="username"></div>
-  <button class="btn-editar-perfil">Editar</button>
-</div>
-</aside>
-    <footer id="rodape">
-      <nav>
+    <header class="header-feed">
+      <h1 class="titulo-header">Ellas</h1>
+      <button id="logout-perfil" class="logout-header">Logout</button>
+    </header>
+    <div class="body-feed">
+      <section id="conteudo-central">
+        <form name= "myForm" action="" id="post-form" class="post-form">
+          <label for="name-film">Filme</label>
+          <input type="text" id="name-film" />
+          <label for="img-film">Anexe uma imagem do filme</label>
+          <input type="file" id="input-img-film" accept="image/*" />
+          <textarea
+            name="post-input"
+            id="post-text"
+            cols="30"
+            rows="10"
+            placeholder="Escreva sobre o filme...">
+          </textarea>
+          <div class="buttons">
+            <button class="button-post" type="button" id="button-publicar">Publicar</button>
+            <input class="button-post" type="reset" id="button-descartar" value="Descartar">
+          </div>
+        </form>
+        <div id="feed" class="posts-feed">
+          <div id="lista-feed" class="lista-feed"></div>
+        </div>
+      </section>
+      <aside id="conteudo-lateral">
+        <div id="card-perfil">
+        <img src="" alt=""/>
+        <input type="file" id="foto-usuario" accept="image/*"></input>
+        <div class="username"></div>
+        <button class="btn-editar-perfil">Editar</button>
+        </div>
+        </aside>
+        </div>
+        <footer id="rodape-feed" class="rodape-feed">
+        <nav class="icon-rodape">
         <a href="">Feed</a>
         <a href="">Adicionar</a>
         <a href="">Pesquisar</a>
-      </nav>
-    </footer>  
-    </div>
-    `;
+        </nav>
+        </footer>  
+        </div>
+        `;
   container.innerHTML = template;
 
   loadPosts();
-  const userInfo = receberUsuario();
 
+  //LIMPAR INPUTS
+
+  container.querySelector("#post-form").value = "";
+
+  const userInfo = receberUsuario();
+  console.log(userInfo);
   //CRIAR POST
   const btn = container.querySelector("#button-publicar");
   btn.addEventListener("click", () => {
@@ -79,6 +78,7 @@ export default () => {
       user_id: userInfo.uid,
       username: userInfo.displayName,
       likes: 0,
+      array_likes: [],
     };
 
     postarMensagem(postagem)
@@ -108,8 +108,11 @@ export default () => {
       querySnapshot.forEach((doc) => {
         const post = { id: doc.id, data: doc.data() };
         const componente = postTemplate(post);
+        console.log(componente)
         container.querySelector("#lista-feed").appendChild(componente);
       });
     });
   }
 };
+
+//EDITAR
