@@ -1,14 +1,19 @@
 import {
   deletarPostagem,
   receberUsuario,
-  editarPostagem,
+  // editarPostagem,
+  adicionarLike,
+  retirarLike,
+  atualizarPerfil,
 } from "../services/index.js";
 
 export function postTemplate(post) {
+  console.log(post);
   const userInfo = receberUsuario();
+  console.log(userInfo);
   const componente = document.createElement("div");
   const conteudo = `
-<div id="${post.id}">
+  <div id="${post.id}" class="post-id">
   <div class="usuario-card">
     <h3>${post.data?.username}</h3>
   </div>
@@ -17,18 +22,54 @@ export function postTemplate(post) {
     <section>${post.data?.film_img}</section>
   </div>
   <div class="texto-card">
-  <p>${post.data?.text}</p>
+   <p>${post.data?.text}</p>
   </div>
-  <button class="like">${post.data?.likes}Curtir</button>
+  <div class="like">
+    <span class="like-n">${post.data?.array_likes.length}</span>
+    <button class="like" data-func="like">Curtir</button>
+  </div>
   <div class="none">
     <button class="editar">Editar</button>
+    <button style="display:none" class="salvar">Salvar</button>
     <button class="deletar">Deletar</button>
   </div>
   
-</div>
-`;
+  </div>
+  `;
+  //${post.data?.likes} no button curtir
   componente.innerHTML = conteudo;
 
+  //CURTIR
+
+  let liked = false;
+  componente.addEventListener("click", (event) => {
+    if (event.target.dataset.func === "like") {
+      const somarLike = () => {
+        const curtir = event.target.previousElementSibling;
+        const curtida = Number(curtir.innerText);
+        curtir.innerText = curtida + 1;
+        liked = true;
+      };
+      const diminuirLike = () => {
+        const curtir = event.target.previousElementSibling;
+        const curtida = Number(curtir.innerText);
+        curtir.innerText = curtida - 1;
+        liked = false;
+      };
+      //Atualizar firebase like + array de uid
+      if (liked) {
+        diminuirLike();
+        retirarLike(userInfo.uid, post.id);
+        //remover uid do array firebase
+      } else {
+        somarLike();
+        adicionarLike(userInfo.uid, post.id);
+        //adicionar uid do array firebase
+      }
+    }
+  });
+
+  
   //DELETAR
   const btnDeletar = componente.querySelector(".deletar");
   if (post.data.user_id === userInfo.uid) {
@@ -43,59 +84,23 @@ export function postTemplate(post) {
       // console.log(btnsIntera);
     });
   });
-  return componente;
 
-  // //EDITAR
+  // EDITAR
 
-  // const btnEditar = componente.querySelector(".editar");
-  // btnEditar.addEventListener("click", (text, postId) => {
-  //   editarPostagem(post.id)
-  // });
-  // return componente;
+ const btnEditar = componente.querySelector(".editar")
+ btnEditar.addEventListener("click", (event) => {
+   const edit = event.target.parentElement.previousElementSibling.previousElementSibling.children[0]
+  console.log(event.target.parentElement.previousElementSibling.previousElementSibling.children[0]);
+ edit.setAttribute("contentEditable" , "true");
+ })
 
-  // // função editar post
-  // postsListContainer.addEventListener('click', async (e) => {
-  //   const { target } = e;
-  //   const editPostButton = target.dataset.edit;
-  //   const cancelEditionButton = target.dataset.cancel;
-  //   const saveEditionButton = target.dataset.save;
-  //   const deleteButton = target.dataset.delete;
-  //   const likeButton = target.dataset.like;
-  //   const confirmDelete = target.dataset.confirmdelete;
-  //   const closeModal = target.dataset.closemodal;
+ 
+const btnSalvar = componente.querySelector(".salvar")
 
-  //   // Open edit
-  //   if (editPostButton) {
-  //     const editPostContainer = target.parentNode.parentNode.parentNode.querySelector('.edit-container');
-  //     const userPost = target.parentNode.parentNode.parentNode.querySelector('.user-post');
+btnSalvar.addEventListener("click", () => {
+  console.log("clicou");
 
-  //     editPostContainer.classList.toggle('display-none');
-  //     userPost.classList.toggle('display-none');
-  //   }
-  //   // cancel edit
-  //   if (cancelEditionButton) {
-  //     const liElement = target.parentNode.parentNode.parentNode.parentNode;
-  //     const userPost = liElement.querySelector('.user-post');
-  //     const editcontainer = liElement.querySelector('.edit-container');
-
-  //     editcontainer.classList.toggle('display-none');
-  //     userPost.classList.toggle('display-none');
-  //   }
-  //   // save edit
-  //   if (saveEditionButton) {
-  //     const liElement = target.parentNode.parentNode.parentNode.parentNode;
-  //     const textArea = liElement.querySelector('.edit-post-textarea');
-  //     const newText = textArea.value;
-  //     const postId = textArea.dataset.text;
-
-  //     await firebase.editPost(newText, postId);
-  //     const posts = await firebase.loadPosts();
-  //     await insertPostList(posts);
-  //   }
-
-  const btnCurtir = componente.querySelector(".like");
-  btnLike.addEventListener("click", (uid, postId) => {
-    like: firebase.firestore.FieldValue.arrayUnion(uid);
-  });
-  return componente;
+}) 
+return componente;
 }
+
