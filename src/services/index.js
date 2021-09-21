@@ -73,6 +73,7 @@ export const postarMensagem = (postagem) => {
 
 export const receberUsuario = () => {
   const user = firebase.auth().currentUser;
+
   if (user !== null) {
     // const displayName = user.displayName;
     // const email = user.email;
@@ -105,29 +106,25 @@ export const deletarPostagem = (postId) => {
 //   return user;
 // };
 
-// EDITAR POSTAGEM
-export const editarPostagem = (text, postId) => {
-  return firebase
-    .firestore()
+// // EDITAR POSTAGEM
+// export const editarPostagem = (text, postId) => {
+//   return db.collection("postagens").doc(postId).update({ text: text });
+// };
+
+//CURTIR POSTAGEM/DESCURTIR
+
+export const adicionarLike = (uid, postId) => {
+ console.log(uid, postId)
+  return db
     .collection("postagens")
     .doc(postId)
-    .update({ text: text });
+    .update({ array_likes: firebase.firestore.FieldValue.arrayUnion(uid) });
 };
 
-// CURTIR POSTAGEM/DESCURTIR
-
-export const curtirPostagem = (uid, postId) => {
-  return firebase
-    .firestore()
-    .collection("postagens")
-    .doc(postId)
-    .update({ like: firebase.firestore.FieldValue.arrayUnion(uid) });
-};
-
-export const descurtirPostagem = (uid, postId) => {
-  return firebase
-    .firestore()
-    .collection("postagens")
-    .doc(postId)
-    .update({ like: firebase.firestore.FieldValue.arrayRemove(uid) });
-};
+export const retirarLike = (uid, postId) => {
+  console.log(uid, postId)
+   return db
+     .collection("postagens")
+     .doc(postId)
+     .update({ array_likes: firebase.firestore.FieldValue.arrayRemove(uid) });
+ };
