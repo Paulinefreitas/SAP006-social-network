@@ -1,7 +1,7 @@
 import {
   deletarPostagem,
   receberUsuario,
-  // editarPostagem,
+  
   adicionarLike,
   retirarLike,
   atualizarPerfil,
