@@ -1,38 +1,22 @@
-.login {
+ .login {
   border: 0;
   box-sizing: border-box;
   background-color: rgba(239, 187, 76);
   background-repeat: no-repeat;
   background-position: absolute;
+  
 }
 
 .container {
   display: flex;
-  align-items: center;
-  justify-content: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 100px;
 }
 
-.images {
-  width: 450px;
-  height: 100px;
-  position: relative;
-  left: 50px;
-  top: -40px;
-  z-index: -1;
-}
 
-/* .images img {
-  width: 500px;
-	height: 600px;
-	position: relative;
-	left: 50px;
-	top: -40px;
-  align-items: flex-end;
-  display: flex;
-  
-} */
 
-.text p {
+.p {
   display: block;
   float: right;
   width: 50%;
@@ -40,18 +24,16 @@
 }
 
 .card {
+  background-color: #ffffff95;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 10%;
+  box-shadow: 3px 3px 1px 0px #00000060;
+  padding:40px;
+  justify-content: left;
 }
 
-.card form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem;
-}
+
 
 h1 {
   text-align: left;
@@ -67,14 +49,6 @@ h1 {
   align-items: center;
 }
 
-p {
-  text-align: left;
-  color: black;
-  font-family: sans-serif;
-  font-size: 20px;
-  margin-top: 0%;
-  margin-left: 80px;
-}
 
 h2 {
   font-size: 30px;
@@ -90,14 +64,6 @@ h2 {
   margin-left: 10px;
 }
 
-#msgError {
-  text-align: center;
-  color: #ff0000;
-  background-color: #ffbbbb;
-  padding: 10px;
-  border-radius: 4px;
-  display: none;
-}
 
 button {
   background-color: white;
@@ -110,13 +76,13 @@ button {
   border: 2px solid #701a73;
   border-radius: 10px;
   box-sizing: border-box;
-  margin-top: 5px;
+  margin-top:25px;
   justify-content: center;
   text-align: center;
 }
 
 input {
-  width: 85%;
+  width:100%;
   padding: 5px 10px;
   display: inline-block;
   border: 1px solid #701a73;
@@ -131,19 +97,22 @@ input {
 }
 
 .or-area {
-  font-size: 15px;
+  font-size: 10px;
   margin-top: 10px;
+  justify-content:center ;
 }
 
 .font-small {
   color: black;
   font-weight: 200px;
-  margin-top: 30px;
+  margin-top: 80px;
+  font-size:25px;
+  
 }
 
 /* responsivo */
 
-@media screen and (max-width: 768px) {
+ @media screen and (max-width: 768px) {
   .container {
     width: 70vw;
     height: 65vh;
@@ -157,7 +126,4 @@ input {
     width: 20%;
   }
 
-  .img-wonder {
-    background-repeat: no-repeat;
-  }
 }

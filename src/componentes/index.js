@@ -1,7 +1,7 @@
 import {
   deletarPostagem,
   receberUsuario,
-  // editarPostagem,
+  
   adicionarLike,
   retirarLike,
   atualizarPerfil,
@@ -89,18 +89,12 @@ export function postTemplate(post) {
 
  const btnEditar = componente.querySelector(".editar")
  btnEditar.addEventListener("click", (event) => {
-   const edit = event.target.parentElement.previousElementSibling.previousElementSibling.children[0]
-  console.log(event.target.parentElement.previousElementSibling.previousElementSibling.children[0]);
+ const edit = event.target.parentElement.previousElementSibling.previousElementSibling.children[0]
  edit.setAttribute("contentEditable" , "true");
+ edit.focus();
  })
-
  
-const btnSalvar = componente.querySelector(".salvar")
 
-btnSalvar.addEventListener("click", () => {
-  console.log("clicou");
-
-}) 
 return componente;
 }
 

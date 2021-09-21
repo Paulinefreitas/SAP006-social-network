@@ -8,9 +8,6 @@ export default () => {
     <div class="text">
       <h1>Ellas</h1>
       <p>Uma filmografia repleta de mulheres incríveis para te inspirar!</p>
-      <div class = "images">
-      <img src="../imagens/wonderwoman.png"/>
-    </div>
     <div class="container">
       <div class="card">
         <h2>Fazer login :</h2>
