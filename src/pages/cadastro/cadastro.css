@@ -6,18 +6,87 @@
 .container-register {
   display: flex;
   justify-content: right;
-  width: 100%;
+  width: 100;
   margin-top: 0%;
 }
 .card-register {
+  background-color: #ffffff95;
   padding: 30px;
   border-radius: 4%;
   box-shadow: 3px 3px 1px 0px #00000060;
   margin-top: 0%;
+  margin-right: 40px;
+  
 }
 
-h2 {
+.header-register{
   text-align: center;
   margin-bottom: 20px;
   color: #272262;
+
+}
+
+.titulo-card {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #272262;
+  font-size: 25px; 
+}
+
+input :required{
+  width: 100px;;
+  padding: 5px 10px;
+  display: inline-block;
+  border: 1px solid #701a73;
+  border-radius: 10px;
+  background-color: white;
+  min-width: 180px;
+  font-size: 16px;
+  outline: none;
+  margin-bottom: 20px;
+  color: #701a73;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+#button-register {
+  background-color:white;
+  color: #272262;
+  padding: 3px;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.4s ease-out;
+  border: 2px solid #701a73;
+  border-radius: 10px;
+  box-sizing: border-box;
+  margin-top:30px;
+  text-align: center;
+  margin-left: 260px;
+}
+
+.font-small-register{
+  color: black;
+  font-weight: 200px;
+  margin-top: 80px;
+  font-size:25px;
+  margin-left:150px;
+}
+
+/* responsivo */
+
+@media screen and (max-width: 768px) {
+  .container-register {
+    width: 60vw;
+    height: 65vh;
+  }
+
+  #button-register {
+    font-size: 12px;
+  }
+
+  input:required {
+    width: 20%;
+  }
+
 }

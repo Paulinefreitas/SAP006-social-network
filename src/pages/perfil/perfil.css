@@ -1,0 +1,17 @@
+.perfil {
+  margin: 110px auto;
+  
+}
+
+.img-persona {
+  background-color: rgb(141, 141, 228);
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+}
+
+#card-perfil {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}

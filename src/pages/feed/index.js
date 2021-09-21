@@ -11,51 +11,45 @@ export default () => {
   <div class="feed">
     <header class="header-feed">
       <h1 class="titulo-header">Ellas</h1>
-      <button id="logout-perfil" class="logout-header">Logout</button>
+      <button id="logout-perfil" class="logout-header"><img src="imagens/sair.png" alt="icone de sai"></button>
     </header>
     <div class="body-feed">
       <section id="conteudo-central">
         <form name= "myForm" action="" id="post-form" class="post-form">
           <label for="name-film">Filme</label>
-          <input type="text" id="name-film" />
-          <label for="img-film">Anexe uma imagem do filme</label>
-          <input type="file" id="input-img-film" accept="image/*" />
+          <input type="text" id="name-film" class="inputs-form"/>
           <textarea
             name="post-input"
             id="post-text"
+            class="inputs-form"
             cols="30"
             rows="10"
             placeholder="Escreva sobre o filme...">
           </textarea>
           <div class="buttons">
             <button class="button-post" type="button" id="button-publicar">Publicar</button>
-            <input class="button-post" type="reset" id="button-descartar" value="Descartar">
+            <input class="button-post" type="reset" id="button-descartar" value="Cancelar">
           </div>
         </form>
         <div id="feed" class="posts-feed">
           <div id="lista-feed" class="lista-feed"></div>
         </div>
       </section>
-      <aside id="conteudo-lateral">
-        <div id="card-perfil">
-        <img src="" alt=""/>
-        <input type="file" id="foto-usuario" accept="image/*"></input>
-        <div class="username"></div>
-        <button class="btn-editar-perfil">Editar</button>
-        </div>
-        </aside>
-        </div>
+    </div>
         <footer id="rodape-feed" class="rodape-feed">
         <nav class="icon-rodape">
-        <a href="">Feed</a>
-        <a href="">Adicionar</a>
-        <a href="">Pesquisar</a>
+        <a href="#feed"><img src="imagens/feed.png" alt="icone de feed">
+        </a>
+        <a href="#feed"><img src="imagens/adicionar.png" alt="icone de adicionar">
+        </a>
+        <a href="#perfil"><img src="imagens/perfil.png" alt="icone de perfil">
+        </a>
         </nav>
         </footer>  
         </div>
         `;
-  container.innerHTML = template;
-
+        container.innerHTML = template;
+        
   loadPosts();
 
   //LIMPAR INPUTS
@@ -70,11 +64,9 @@ export default () => {
     console.log("clicou aqui!");
     const text = container.querySelector("#post-text").value;
     const filmName = container.querySelector("#name-film").value;
-    const filmImage = container.querySelector("#input-img-film").value;
     const postagem = {
       text: text,
       film_name: filmName,
-      film_img: filmImage,
       user_id: userInfo.uid,
       username: userInfo.displayName,
       likes: 0,
@@ -90,7 +82,8 @@ export default () => {
         console.error("Error writing document: ", error);
       });
   });
-
+  
+//LOGOUT
   const logout = container.querySelector("#logout-perfil");
   logout.addEventListener("click", () => {
     logOut();

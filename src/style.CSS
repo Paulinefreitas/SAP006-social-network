@@ -1,17 +1,16 @@
 @import url("./pages/login/login.css");
 @import url("./pages/cadastro/cadastro.css");
 @import url("./pages/feed/feed.css");
+@import url("./pages/perfil/perfil.css"); 
 
-* {
-  margin: 0;
-  padding: 0;
-}
-
-.none {
+.edit-btn {
   display: none;
+  justify-content: space-around;
 }
 
 body {
+  margin: 0;
+  padding: 0;
   background-repeat: no-repeat;
   background-size: contain;
   background-attachment: fixed;

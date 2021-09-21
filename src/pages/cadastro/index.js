@@ -6,11 +6,11 @@ export default () => {
 
   const template = `
   <div class="cadastro">  
-  <h2>Ellas</h2>
+  <h1 class="header-register">Ellas</h1>
     <p>Uma filmografia repleta de mulheres incríveis para te inspirar!</p>
-    <div class="container">
-      <div class="card">
-        <h3>CRIAR UMA NOVA CONTA</h3>
+    <div class="container-register">
+      <div class="card-register">
+        <h2 class="titulo-card">CRIAR UMA NOVA CONTA</h2>
         <form>
           <input required="required" autocomplete="off" type="text" placeholder="Insira seu nome completo" id="username"
           class='login-area'>
@@ -20,6 +20,8 @@ export default () => {
           id="register-password" class="login-area">
           <div></div>
           <button class="btn button-area" id="button-register">Cadastrar</button>
+          <p class='font-small-register'>Já tem uma conta?
+        <a href='/#login' id='sign-up-login'>Faça o login.</a>
         </form>
       </div>
     </div> 

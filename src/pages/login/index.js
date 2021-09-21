@@ -6,15 +6,12 @@ export default () => {
   const template = `
   <div class="login">
     <div class="text">
-      <h1>Ellas</h1>
-      <p>Uma filmografia repleta de mulheres incríveis para te inspirar!</p>
-      <div class = "images">
-      <img src="../imagens/wonderwoman.png"/>
-    </div>
+      <h1 class="titulo">Ellas</h1>
+      <p class="descricao">Uma filmografia repleta de mulheres incríveis para te inspirar!</p>
     <div class="container">
       <div class="card">
         <h2>Fazer login :</h2>
-        <form method='post'>
+        <form class="formulario" method='post'>
           <input required="" autocomplete="off" type='email' placeholder='Email' id='emailArea' class='login-area'>
           <input required="" autocomplete="off" type='password' placeholder='Senha' id='passwordArea' class='login-area'>
         </form>
@@ -28,7 +25,6 @@ export default () => {
     </div> 
   </div>
 `;
-
   container.innerHTML = template;
 
   const email = container.querySelector("#emailArea");
